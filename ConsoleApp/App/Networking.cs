@@ -170,44 +170,53 @@ namespace ConsoleApp.App
         /// <param name="nameOrAddress">The target to pings</param>
         private static void GetPingDiagnostics(string nameOrAddress)
         {
-            Ping pingSender = new();
-            PingOptions pingOptions = new();
-
-            // use a TTL value of 128 but w/ different fragmentation
-            pingOptions.DontFragment = true;
-            pingOptions.Ttl = 128;
-
-            // create a buffer of 32 bytes and timeout of 120 ms
-            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            int timeout = 120;
-
-            // Add the options to the ping sender and save to a ping reply
-            PingReply reply = pingSender.Send(nameOrAddress, timeout, buffer, pingOptions);
-
-            // Check the ping status, issue the following messages if it succeeds
-            if (reply.Status == IPStatus.Success)
+            // makes sure a ping will work first
+            if (DoesPingSucceed(nameOrAddress))
             {
-                Console.WriteLine("ping successful!!");
-                Console.WriteLine("");
-                Console.WriteLine("Address: {0}", reply.Address.ToString());
-                Console.WriteLine("Round Trip time: {0}", reply.RoundtripTime);
+                Ping pingSender = new();
+                PingOptions pingOptions = new();
 
-                // make sure the options isn't null
-                if (reply.Options != null)
+                // use a TTL value of 128 but w/ different fragmentation
+                pingOptions.DontFragment = true;
+                pingOptions.Ttl = 128;
+
+                // create a buffer of 32 bytes and timeout of 120 ms
+                string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                byte[] buffer = Encoding.ASCII.GetBytes(data);
+                int timeout = 120;
+
+                // Add the options to the ping sender and save to a ping reply
+                PingReply reply = pingSender.Send(nameOrAddress, timeout, buffer, pingOptions);
+
+                // Check the ping status, issue the following messages if it succeeds
+                if (reply.Status == IPStatus.Success)
                 {
-                    Console.WriteLine("Time to live: {0}", !string.IsNullOrWhiteSpace(reply.Options.Ttl.ToString()) ? reply.Options.Ttl.ToString() : string.Empty);
-                    Console.WriteLine("Don't fragment: {0}", !string.IsNullOrWhiteSpace(reply.Options.DontFragment.ToString()) ? reply.Options.DontFragment.ToString() : string.Empty);
-                }
+                    Console.WriteLine("ping successful!!");
+                    Console.WriteLine("");
+                    Console.WriteLine("Address: {0}", reply.Address.ToString());
+                    Console.WriteLine("Round Trip time: {0} ms", reply.RoundtripTime);
 
-                Console.WriteLine("Buffer size: {0}", reply.Buffer.Length);
+                    // make sure the options isn't null
+                    if (reply.Options != null)
+                    {
+                        Console.WriteLine("Time to live: {0} packets left", !string.IsNullOrWhiteSpace(reply.Options.Ttl.ToString()) ? reply.Options.Ttl.ToString() : string.Empty);
+                        Console.WriteLine("Don't fragment: {0}", !string.IsNullOrWhiteSpace(reply.Options.DontFragment.ToString()) ? reply.Options.DontFragment.ToString() : string.Empty);
+                    }
+
+                    Console.WriteLine("Buffer size: {0} bytes", reply.Buffer.Length);
+                }
+                else // issue the following messages if the ping fails
+                {
+                    Console.WriteLine("ping failed :(");
+                    Console.WriteLine("");
+                    Console.WriteLine("ping result: {0}", reply.Status.ToString());
+                }
             }
-            else // issue the following messages if the ping fails
+            else
             {
-                Console.WriteLine("ping failed :(");
-                Console.WriteLine("");
-                Console.WriteLine("ping result: {0}", reply.Status.ToString());
+                Console.WriteLine("seems the target is down. check your input and try again");
             }
+            
         }
 
         #endregion
