@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
@@ -18,6 +20,7 @@ namespace ConsoleApp.App
         {
             "[t]est ping a url/host",
             "get ping [d]iagnostics to a url/host",
+            "run a [u]ri test",
             "[c]lose this menu"
         };
 
@@ -32,6 +35,10 @@ namespace ConsoleApp.App
 
                 case 'd': // get ping diagnostics
                     PingDiagnostics();
+                    break;
+
+                case 'u': // try the uri test
+                    UriTest();
                     break;
 
                 case 'c': // close menu
@@ -59,7 +66,7 @@ namespace ConsoleApp.App
             Thread.Sleep(2000);
 
             // get the ping target and test the ping
-            string pingTarget = GetPingTarget();
+            string pingTarget = GetTarget(false);
             bool pingSuccess = DoesPingSucceed(pingTarget);
 
             // spacing
@@ -83,7 +90,7 @@ namespace ConsoleApp.App
             Console.WriteLine("you have chosen to view ping diagnostics");
             Thread.Sleep(2000);
 
-            string pingTarget = GetPingTarget();
+            string pingTarget = GetTarget(false);
             GetPingDiagnostics(pingTarget);
 
             Console.WriteLine();
@@ -99,15 +106,19 @@ namespace ConsoleApp.App
         #region Main networking functions
 
         /// <summary>
-        /// prompts the user to provide a pingable target
+        /// prompts the user to provide a network target
         /// </summary>
-        /// <returns>the string/user input for the ping target</returns>
-        private static string GetPingTarget()
+        /// <returns>the string/user input for the network target</returns>
+        private static string GetTarget(bool urlOnly)
         {
             // clear window and issue user prompts
             Console.Clear();
-            Console.WriteLine("please write the ping destination");
-            Console.Write("(note - the following should all work: url, ip address, or hostname): ");
+            Console.WriteLine("please write the target destination");
+
+            if (urlOnly)
+                Console.Write("note - only a complete url will work (ie: https://www.test.com): ");
+            else
+                Console.Write("note - the following should all work (url, ip address, or hostname): ");
 
             // necessary variable and user input
             string target = Console.ReadLine();
@@ -116,12 +127,26 @@ namespace ConsoleApp.App
             // check user input and ask them to retry IF necessary
             while (!validTarget)
             {
-                if (string.IsNullOrWhiteSpace(target)) // invalid target, prompt user to try again
+                if (string.IsNullOrWhiteSpace(target)) // empty target, prompt user to try again
                 {
-                    Console.WriteLine("ping destination was invalid, please try again");
+                    Console.WriteLine("target destination was invalid, please try again");
                     Console.WriteLine();
 
                     target = Console.ReadLine();
+                }
+                else if (urlOnly) // uh-oh, need to make sure its a full url too
+                {
+                    // validate the string STARTS correctly
+                    if (target.StartsWith("https://") || target.StartsWith("http://"))
+                        validTarget = true;
+                    else
+                    {
+                        // it didn't, prompt user to try again
+                        Console.WriteLine("target destination was invalid, please try again");
+                        Console.WriteLine();
+
+                        target = Console.ReadLine();
+                    }
                 }
                 else // seems like a decent target, return it
                     validTarget = true;
@@ -217,6 +242,68 @@ namespace ConsoleApp.App
                 Console.WriteLine("seems the target is down. check your input and try again");
             }
             
+        }
+
+        #endregion
+
+        #region Proof of concept area
+
+        /// <summary>
+        /// Runs a test on a URL. Get's URI and web resource information
+        /// </summary>
+        private static void UriTest()
+        {
+            // get a url target from the user
+            string target = GetTarget(true);
+
+            // alert user to impending test
+            Console.WriteLine();
+            Console.WriteLine("preparing to run a uri test on: " + target);
+            Console.WriteLine();
+            
+            // create a new uri from the provided target and write it's attributes to the screen
+            Uri path = new(target);
+            Console.WriteLine("Port: " + path.Port);
+            Console.WriteLine("Host: " + path.Host);
+            Console.WriteLine("LocalPath: " + path.LocalPath);
+            Console.WriteLine("Authority: " + path.Authority);
+            Console.WriteLine("Scheme: " + path.Scheme);
+            Console.WriteLine("PathAndQuery: " + path.PathAndQuery);
+            Console.WriteLine("Query: " + path.Query);
+            Console.WriteLine("AbsolutePath: " + path.AbsolutePath);
+            Console.WriteLine("AbsoluteUri: " + path.AbsoluteUri);
+            Console.WriteLine("OriginalString: " + path.OriginalString);
+            Console.WriteLine("Fragment: " + path.Fragment);
+            Console.WriteLine("UserInfo: " + path.UserInfo);
+            Console.WriteLine("IsAbsoluteUri: " + path.IsAbsoluteUri);
+            Console.WriteLine("IsDefaultPort: " + path.IsDefaultPort);
+            Console.WriteLine("IsFile: " + path.IsFile);
+            Console.WriteLine("IsLoopback: " + path.IsLoopback);
+            Console.WriteLine("IsUnc: " + path.IsUnc);
+
+            // alert user to resource test, attempt to get uri resource info
+            Console.WriteLine();
+            Console.WriteLine("Attempting to get web resource...");
+            GetWebResource(path);
+
+            // add a little spacing and prompt user to close feature
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("press any key to continue");
+            Console.ReadKey();
+        }
+
+        private static void GetWebResource(Uri uri)
+        {
+            WebRequest request = WebRequest.Create(uri); // obsolete?
+
+            using WebResponse response = request.GetResponse();
+
+            var headers = response.Headers;
+
+            Console.WriteLine(headers);
+
+            // HttpClient request = WebRequest.Create(uri);
         }
 
         #endregion

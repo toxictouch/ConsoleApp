@@ -43,6 +43,8 @@ namespace ConsoleApp.App
 
         #endregion
 
+        #region Displays icons and clears the screen
+
         /// <summary>
         /// Displays a cool icon in the console
         /// </summary>
@@ -179,5 +181,7 @@ namespace ConsoleApp.App
 
             Console.Clear();
         }
+
+        #endregion
     }
 }
