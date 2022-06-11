@@ -44,7 +44,7 @@ namespace ConsoleApp.App
         /// </summary>
         private static void DisplayAppInfo()
         {
-            string Welcome = " welcome to skm3 - console app demo";
+            string Welcome = "welcome to skm3 - console app demo";
             string Author = "author: stanley munson";
             string Date = DateTime.Now.ToLongDateString();
             string Time = DateTime.Now.ToShortTimeString();
