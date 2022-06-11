@@ -70,6 +70,8 @@ namespace ConsoleApp.App
                 closeMenu = ConsoleDisplays.MenuSelector(selection);
             else if (menuName == Start.MenuName)
                 closeMenu = Start.MenuSelector(selection);
+            else if (menuName == Attacking.MenuName)
+                closeMenu |= Attacking.MenuSelector(selection);
 
             // TODO: add new menus here
 

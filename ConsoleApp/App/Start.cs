@@ -73,6 +73,7 @@ namespace ConsoleApp.App
         {
             "go to console [d]isplays menu",
             "go to [n]etworking menu",
+            "go to [a]ttacking menu",
             "[c]lose this application"
         };
 
@@ -86,6 +87,10 @@ namespace ConsoleApp.App
                     break;
                 case 'n':
                     Menuing.CreateMenu(Networking.MenuName, Networking.MenuOptions);
+                    break;
+                case 'a':
+                    ConsoleDisplays.Warning(Attacking.MenuName); // issue warning before opening menu
+                    Menuing.CreateMenu(Attacking.MenuName, Attacking.MenuOptions);
                     break;
                 case 'c':
                     closeMenu = true;

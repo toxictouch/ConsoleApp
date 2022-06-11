@@ -182,6 +182,42 @@ namespace ConsoleApp.App
             Console.Clear();
         }
 
+        /// <summary>
+        /// Issue a warning to the user regarding their menu choice
+        /// </summary>
+        /// <param name="menuName">Takes menu name to warn user</param>
+        public static void Warning(string menuName)
+        {
+            string menuFunction = menuName.Replace(" menu", string.Empty);
+
+            string msgWarn = "----------------------WARNING----------------------";
+            string msgSelected = "!!! you selected the " + menuName + " !!!";
+            string msgIllegal = "!!! the features in this menu or the way they can be used, may be ILLEGAL !!!";
+            string msgDiscretion = "!!! use EXTREME discretion when " + menuFunction + " !!!";
+            string msgDisclaimer = "--- you have been warned ---";
+
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(string.Format("{0," + ((Console.WindowWidth / 2) + (msgWarn.Length / 2)) + "}", msgWarn));
+            Console.WriteLine();
+            Console.WriteLine(string.Format("{0," + ((Console.WindowWidth / 2) + (msgSelected.Length / 2)) + "}", msgSelected));
+            Console.WriteLine();
+            Console.WriteLine(string.Format("{0," + ((Console.WindowWidth / 2) + (msgIllegal.Length / 2)) + "}", msgIllegal));
+            Console.WriteLine();
+            Console.WriteLine(string.Format("{0," + ((Console.WindowWidth / 2) + (msgDiscretion.Length / 2)) + "}", msgDiscretion));
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(string.Format("{0," + ((Console.WindowWidth / 2) + (msgDisclaimer.Length / 2)) + "}", msgDisclaimer));
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("press any key to proceed");
+            Console.ReadKey();
+        }
+
         #endregion
     }
 }

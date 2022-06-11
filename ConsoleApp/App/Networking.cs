@@ -109,7 +109,7 @@ namespace ConsoleApp.App
         /// prompts the user to provide a network target
         /// </summary>
         /// <returns>the string/user input for the network target</returns>
-        private static string GetTarget(bool urlOnly)
+        internal static string GetTarget(bool urlOnly)
         {
             // clear window and issue user prompts
             Console.Clear();
@@ -161,7 +161,7 @@ namespace ConsoleApp.App
         /// </summary>
         /// <param name="nameOrAddress">The ping target</param>
         /// <returns>True if the ping succeeded; false if it failed</returns>
-        private static bool DoesPingSucceed(string nameOrAddress)
+        internal static bool DoesPingSucceed(string nameOrAddress)
         {
             bool pingable = false;
             Ping pinger = null;
@@ -175,8 +175,7 @@ namespace ConsoleApp.App
             catch (PingException ex)
             {
                 // Discard PingExceptions and return false;
-                Console.WriteLine("a ping exception occured | message follows");
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("a ping exception occured O_o");
             }
             finally
             {
