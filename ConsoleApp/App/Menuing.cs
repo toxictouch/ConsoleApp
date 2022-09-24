@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace ConsoleApp.App
 {
     internal class Menuing
     {
+        /// <summary>
+        /// Future proofs for the inevitable logging steps required
+        /// </summary>
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// Creates menu, displays the menu names and the options for the menu. Continues to show options until the
         /// menu is triggered to close

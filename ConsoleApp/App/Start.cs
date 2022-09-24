@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 
 namespace ConsoleApp.App
 {
     internal class Start
     {
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         #region App Start functions. Called once
 
         /// <summary>
@@ -13,9 +16,13 @@ namespace ConsoleApp.App
         /// </summary>
         public static void Run()
         {
+            Config.Logging.DotNetConfig();
             Initialize();
             DisplayAppInfo();
             ConsoleDisplays.DisplaySkm3(3);
+
+
+            logger.Info("App.Start.Run => successfully configured!");
         }
 
         /// <summary>

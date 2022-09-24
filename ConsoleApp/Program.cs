@@ -11,10 +11,8 @@ namespace ConsoleApp
 
             /// get the main user menu
             /// I think this can be ignored if wanting to try something differnt
-            //App.Menuing.CreateMenu(App.Start.MenuName, App.Start.MenuOptions);
-            App.Logging.DotNetConfig();
-
-
+            App.Menuing.CreateMenu(App.Start.MenuName, App.Start.MenuOptions);
+            
             // menu has finished, close the app
             App.Menuing.Close();
         }
