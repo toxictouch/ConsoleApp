@@ -106,7 +106,8 @@ namespace ConsoleApp.App
         #region Main networking functions
 
         /// <summary>
-        /// prompts the user to provide a network target
+        /// prompts the user to provide a network target,
+        /// parameter used to specify if the target has to be a URL (ie: a webserver)
         /// </summary>
         /// <returns>the string/user input for the network target</returns>
         internal static string GetTarget(bool urlOnly)
@@ -172,7 +173,7 @@ namespace ConsoleApp.App
                 PingReply reply = pinger.Send(nameOrAddress);
                 pingable = reply.Status == IPStatus.Success;
             }
-            catch (PingException ex)
+            catch (PingException)
             {
                 // Discard PingExceptions and return false;
                 Console.WriteLine("a ping exception occured O_o");
