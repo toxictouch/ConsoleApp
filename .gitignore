@@ -364,3 +364,5 @@ MigrationBackup/
 FodyWeavers.xsd
 *.lnk
 *.config
+/ConsoleApp/App/Config/DbManager.cs
+/ConsoleApp/App/Config/AppConfigs.cs
