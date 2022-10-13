@@ -14,6 +14,7 @@ namespace ConsoleApp.App
         {
             "display a [t]riangle",
             "display skm[3] again",
+            "see a [u]rl substringed from a line of JSON",
             "[c]lose this menu"
         };
 
@@ -27,6 +28,9 @@ namespace ConsoleApp.App
                     break;
                 case '3':
                     DisplaySkm3(5);
+                    break;
+                case 'u':
+                    SubstringUrlFromJson();
                     break;
                 case 'c':
                     closeMenu = true;
@@ -44,6 +48,24 @@ namespace ConsoleApp.App
         #endregion
 
         #region Displays icons and clears the screen
+
+        private static void SubstringUrlFromJson()
+        {
+            // string of JSON (ie: web request response)
+            string json = "{'activationUrl': 'https://dev123.oktapreview.com/welcome/5adfawe12CWEefn54QWEKqer23O5Pasdfas--h@p97', 'activationToken': 'asdfon3q423N-=JK1k'}";
+
+            // get index of unique characters close to URL
+            int startIndex = json.IndexOf("https://");
+            int endIndex = json.IndexOf("', 'activationToken");
+
+            // use substring array to get values between the index's
+            string cleanJson = json[startIndex..endIndex];
+
+            // write the index's and the clean URL
+            Console.WriteLine("Extraced URL: " + cleanJson);
+            Console.WriteLine($"Starting index: {startIndex} | Ending index: {endIndex}");
+            Console.WriteLine();
+        }
 
         /// <summary>
         /// Displays a cool icon in the console
